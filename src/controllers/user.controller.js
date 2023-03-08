@@ -2,6 +2,7 @@ const db = require("../models");
 const { user: User, role: Role, refreshToken: RefreshToken } = db;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const config = require("../config/auth.config.js");
 
 exports.login = (req, res) => {
 	User.findOne({
@@ -43,7 +44,8 @@ exports.login = (req, res) => {
 			});
 		})
 		.catch((err) => {
-			res.status(500).send({ message: err.message });
+			console.error(err.message);
+			res.status(500).send({ message: "Failed to login." });
 		});
 };
 
@@ -58,8 +60,6 @@ exports.refreshToken = async (req, res) => {
 		let refreshToken = await RefreshToken.findOne({
 			where: { token: requestToken },
 		});
-
-		console.log(refreshToken);
 
 		if (!refreshToken) {
 			res.status(403).json({
@@ -113,7 +113,7 @@ exports.create = (req, res) => {
 			} else {
 				console.log("user role set to 1.");
 				user.setRoles(1).then(() => {
-					res.send({ message: "User was created successfully!" });
+					res.send({ message: "User was created successfully." });
 				});
 			}
 		})
@@ -129,11 +129,12 @@ exports.delete = (req, res) => {
 		},
 	})
 		.then((user) => {
-			console.log(user);
 			if (!user)
 				return res.status(404).send({ message: "User not found." });
 			else
-				res.status(200).send({ message: "User deleted successfully." });
+				res.status(200).send({
+					message: "User was deleted successfully.",
+				});
 		})
 		.catch((err) => {
 			res.status(500).send({ message: err.message });
