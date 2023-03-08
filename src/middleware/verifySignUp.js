@@ -2,7 +2,7 @@ const db = require("../models");
 const ROLES = db.ROLES;
 const User = db.user;
 
-checkDuplicateEmail = (req, res, next) => {
+const checkDuplicateEmail = (req, res, next) => {
 	User.findOne({
 		where: {
 			email: req.body.email,
@@ -18,7 +18,7 @@ checkDuplicateEmail = (req, res, next) => {
 	});
 };
 
-checkRolesExisted = (req, res, next) => {
+const checkRolesExisted = (req, res, next) => {
 	if (!ROLES.includes(req.body.roles)) {
 		res.status(400).send({
 			message: `Role '${req.body.roles}' does not exist!`,
@@ -35,3 +35,4 @@ const verifySignUp = {
 };
 
 module.exports = verifySignUp;
+
