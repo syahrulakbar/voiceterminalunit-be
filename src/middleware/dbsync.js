@@ -2,7 +2,7 @@ const db = require("../models");
 const Role = db.role;
 const User = db.user;
 
-init = () => {
+const init = () => {
 	db.sequelize.sync({ force: true }).then(() => {
 		console.log("Drop and Resync Db ...");
 		initial();
@@ -31,3 +31,4 @@ init = () => {
 };
 
 module.exports = init;
+
