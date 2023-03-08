@@ -4,8 +4,7 @@ const Sequelize = require("sequelize");
 const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
 	host: config.HOST,
 	dialect: config.dialect,
-	operatorsAliases: false,
-
+	logging: false,
 	pool: {
 		max: config.pool.max,
 		min: config.pool.min,
@@ -48,3 +47,4 @@ db.user.hasOne(db.refreshToken, {
 db.ROLES = ["superadmin", "admin"];
 
 module.exports = db;
+
