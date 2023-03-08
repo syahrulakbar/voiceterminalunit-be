@@ -15,7 +15,7 @@ exports.getDeviceStatus = (req, res) => {
 					si.cpuTemperature()
 						.then((info) => {
 							status.temperature = info.main;
-							res.status(200).send({ message: status });
+							res.status(200).send({ deviceStatus: status });
 						})
 						.catch((err) => {
 							res.status(500).send({ message: err.message });
