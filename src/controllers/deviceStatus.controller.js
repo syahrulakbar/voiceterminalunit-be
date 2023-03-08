@@ -1,24 +1,25 @@
 const process = require("process");
 
 exports.getDeviceStatus = (req, res) => {
-	var osu = require("node-os-utils");
-
-	var cpu = osu.cpu;
-	var mem = osu.mem;
-
 	var status = {};
+	const si = require("systeminformation");
 
-	mem.info()
+	si.mem()
 		.then((info) => {
-			console.log(info);
-			status.memory = {};
-			status.memory.used = info.usedMemPercentage;
-			status.memory.free = info.freeMemPercentage;
-			cpu.usage()
+			status.memory = parseFloat(
+				((info.active / info.total) * 100).toFixed(2)
+			);
+			si.currentLoad()
 				.then((info) => {
-					console.log(info);
-					status.cpu = info;
-					res.status(200).send({ message: status });
+					status.cpu = parseFloat(info.currentLoad.toFixed(2));
+					si.cpuTemperature()
+						.then((info) => {
+							status.temperature = info.main;
+							res.status(200).send({ message: status });
+						})
+						.catch((err) => {
+							res.status(500).send({ message: err.message });
+						});
 				})
 				.catch((err) => {
 					res.status(500).send({ message: err.message });
