@@ -6,11 +6,11 @@ const { TokenExpiredError } = jwt;
 
 const catchError = (err, res) => {
 	if (err instanceof TokenExpiredError) {
-		return res
-			.status(401)
-			.send({ message: "Unauthorized! Access Token was expired!" });
+		res.status(401).send({
+			message: "Unauthorized! Access Token was expired!",
+		});
 	}
-	return res.sendStatus(401).send({ message: "Unauthorized!" });
+	res.sendStatus(401).send({ message: "Unauthorized!" });
 };
 
 const verifyToken = (req, res, next) => {
@@ -51,3 +51,4 @@ const authJwt = {
 	isAdmin: isAdmin,
 };
 module.exports = authJwt;
+
