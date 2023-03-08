@@ -5,7 +5,8 @@
   "main": "./src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devStart": "nodemon ./src/server.js"
+    "devStart": "nodemon ./src/server.js",
+    "start": "sudo node src/server.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +17,7 @@
     "express": "^4.18.2",
     "ip": "^1.1.8",
     "jsonwebtoken": "^9.0.0",
+    "net-ping": "^1.2.3",
     "node-os-utils": "^1.3.7",
     "pg": "^8.10.0",
     "sequelize": "^6.29.1",
