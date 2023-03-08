@@ -10,6 +10,10 @@ module.exports = function (app) {
 		next();
 	});
 
+	app.post("/api/user/login", controller.login);
+
+	app.post("/api/user/refreshtoken", controller.refreshToken);
+
 	app.post(
 		"/api/users",
 		[
@@ -21,14 +25,5 @@ module.exports = function (app) {
 	);
 
 	app.delete("/api/users/:id", controller.delete);
-
-	// app.get("/api/test/all", controller.allAccess);
-
-	// app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
-
-	// app.get(
-	// 	"/api/test/admin",
-	// 	[authJwt.verifyToken, authJwt.isAdmin],
-	// 	controller.adminBoard
-	// );
 };
+
