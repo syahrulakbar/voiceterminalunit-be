@@ -61,6 +61,43 @@ module.exports = function (app) {
 	 *                    type: string
 	 *                    description: User's refresh token to generate new access token.
 	 *                    example: 95100f31-90d9-4173-9b4c-18980aa5499d
+	 *       401:
+	 *         description: Invalid password. incorrect password.
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                accessToken:
+	 *                  type: 'null'
+	 *                  description: User's access token to access API.
+	 *                  example: null
+	 *                message:
+	 *                  type: string
+	 *                  description: Result message.
+	 *                  example: Invalid Password.
+	 *       404:
+	 *         description: User not found, incorrect email.
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                message:
+	 *                  type: string
+	 *                  description: Result message.
+	 *                  example: Email address is not registered. Check the email address again.
+	 *       500:
+	 *         description: Application error.
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                message:
+	 *                  type: string
+	 *                  description: Application error.
+	 *                  example: Failed to login. Please check application log.
 	 */
 	app.post("/api/users/login", controller.login);
 
@@ -85,7 +122,7 @@ module.exports = function (app) {
 	 *                  example: 9ad656a6-4c90-4701-8cd1-2d65ff08a0ae
 	 *     responses:
 	 *       200:
-	 *          description: Successfully logged in.
+	 *          description: Access token was generated successfully.
 	 *          content:
 	 *            application/json:
 	 *              schema:
@@ -99,7 +136,39 @@ module.exports = function (app) {
 	 *                    type: string
 	 *                    description: User's refresh token.
 	 *                    example: 9ad656a6-4c90-4701-8cd1-2d65ff08a0ae
-	 *
+	 *       400:
+	 *          description: Refresh token is invalid.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Result message.
+	 *                    example: Refresh token is not in database!
+	 *       403:
+	 *          description: Refresh token was expired.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Result message.
+	 *                    example: Refresh token was expired. Please make a new signin request
+	 *       500:
+	 *          description: Application Error.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Application Error.
+	 *                    example: Failed to generate access token. Please check application log.
 	 */
 	app.post("/api/users/refreshtoken", controller.refreshToken);
 
@@ -148,6 +217,50 @@ module.exports = function (app) {
 	 *                    type: string
 	 *                    description: Result message.
 	 *                    example: User was created successfully.
+	 *       400:
+	 *          description: Email already used.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Result message.
+	 *                    example: Failed! Email is already in use!
+	 *       401:
+	 *          description: Access token expired.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Result message.
+	 *                    example: Unauthorized! Access Token was expired!
+	 *       403:
+	 *          description: Token not provided.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Result message.
+	 *                    example: No token provided!
+	 *       500:
+	 *          description: Application Error.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Application Error.
+	 *                    example: Failed to create user. Please check application log.
 	 */
 	app.post(
 		"/api/users",
@@ -185,6 +298,28 @@ module.exports = function (app) {
 	 *                    type: string
 	 *                    description: Result message.
 	 *                    example: User was deleted successfully.
+	 *       404:
+	 *          description: User not found, incorrect id.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Result message.
+	 *                    example: User not found.
+	 *       500:
+	 *          description: Application Error.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Application Error.
+	 *                    example: Failed to delete user. Please check application log.
 	 */
 	app.delete("/api/users/:id", controller.delete);
 };
