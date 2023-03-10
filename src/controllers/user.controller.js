@@ -3,6 +3,7 @@ const { user: User, role: Role, refreshToken: RefreshToken } = db;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const config = require("../config/auth.config.js");
+const { logger } = require("../utils/logger.js");
 
 exports.login = (req, res) => {
 	User.findOne({
@@ -47,7 +48,7 @@ exports.login = (req, res) => {
 			});
 		})
 		.catch((err) => {
-			console.error(err.message);
+			logger.error(err.message);
 			res.status(500).send({
 				message: "Failed to login. Please check application log.",
 			});
@@ -93,7 +94,7 @@ exports.refreshToken = async (req, res) => {
 			refreshToken: refreshToken.token,
 		});
 	} catch (err) {
-		console.error(err.message);
+		logger.error(err.message);
 		return res.status(500).send({
 			message:
 				"Failed to generate access token. Please check application log.",
@@ -120,14 +121,13 @@ exports.create = (req, res) => {
 					});
 				});
 			} else {
-				console.log("user role set to 1.");
 				user.setRoles(1).then(() => {
 					res.send({ message: "User was created successfully." });
 				});
 			}
 		})
 		.catch((err) => {
-			console.error(err.message);
+			logger.error(err.message);
 			res.status(500).send({
 				message: "Failed to create user. Please check application log.",
 			});
@@ -149,7 +149,7 @@ exports.delete = (req, res) => {
 				});
 		})
 		.catch((err) => {
-			console.error(err.message);
+			logger.error(err.message);
 			res.status(500).send({
 				message: "Failed to delete user. Please check application log.",
 			});

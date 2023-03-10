@@ -1,8 +1,8 @@
-const process = require("process");
+const si = require("systeminformation");
+const { logger } = require("../utils/logger.js");
 
 exports.getDeviceStatus = (req, res) => {
 	let status = {};
-	const si = require("systeminformation");
 
 	si.mem()
 		.then((info) => {
@@ -18,14 +18,19 @@ exports.getDeviceStatus = (req, res) => {
 							res.status(200).send({ ...status });
 						})
 						.catch((err) => {
-							res.status(500).send({ message: err.message });
+							logger.error(err.message);
+							res.status(500).send({
+								message:
+									"Failed to get Device Status. Please check application log.",
+							});
 						});
 				})
 				.catch((err) => {
-					res.status(500).send({ message: err.message });
+					logger.error(err.message);
 				});
 		})
 		.catch((err) => {
-			res.status(500).send({ message: err.message });
+			logger.error(err.message);
 		});
 };
+

@@ -5,6 +5,8 @@ const dbSync = require("./middleware/dbsync.js");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./utils/swagger.js").swaggerSpec;
+const winston = require("winston");
+const { logger, combinedFormat } = require("./utils/logger.js");
 
 const app = express();
 
@@ -25,6 +27,11 @@ if (process.env.NODE_ENV == "production") {
 	db.sequelize.sync();
 } else {
 	dbSync();
+	logger.add(
+		new winston.transports.Console({
+			format: combinedFormat,
+		})
+	);
 }
 
 // swagger
@@ -37,6 +44,6 @@ require("./routes/maintenance.route.js")(app);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-	console.log(`Server is running on port ${PORT}.`);
+	logger.info(`Server is running on port ${PORT}.`);
 });
 

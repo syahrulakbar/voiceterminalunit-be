@@ -1,12 +1,14 @@
+const IP = require("ip");
+const { logger } = require("../utils/logger.js");
+
 exports.getIPAddress = (req, res) => {
-	const IP = require("ip");
 	const ipAddress = IP.address();
 	res.status(200).send({ ipAddress: ipAddress });
 };
 
 exports.connectionStatus = (req, res) => {
-	const ping = require("net-ping");
 	try {
+		const ping = require("net-ping");
 		let session = ping.createSession();
 		session.pingHost("8.8.8.8", function (error, target) {
 			if (error)
@@ -22,7 +24,7 @@ exports.connectionStatus = (req, res) => {
 			else res.status(200).send({ message: target + ": Alive" });
 		});
 	} catch (err) {
-		console.error(err.message);
+		logger.error(err.message);
 		if (err.message === "Operation not permitted")
 			res.status(500).send({
 				message:

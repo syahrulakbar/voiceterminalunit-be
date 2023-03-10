@@ -1,16 +1,18 @@
 const db = require("../models");
 const Role = db.role;
 const User = db.user;
+const { logger } = require("../utils/logger.js");
 
 const init = () => {
 	db.sequelize.sync({ force: true }).then(() => {
-		console.log("Drop and Resync Db ...");
-		initial();
+		initial().then(() => {
+			logger.info("Done syncing database.");
+		});
 	});
 
 	const bcrypt = require("bcryptjs");
 
-	function initial() {
+	const initial = async () => {
 		User.create({
 			email: "superadmin@mail.com",
 			password: bcrypt.hashSync("123456", 8),
@@ -27,7 +29,7 @@ const init = () => {
 			id: 2,
 			name: "admin",
 		});
-	}
+	};
 };
 
 module.exports = init;
