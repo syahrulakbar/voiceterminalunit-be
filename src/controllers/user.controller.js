@@ -12,7 +12,10 @@ exports.login = (req, res) => {
 	})
 		.then(async (user) => {
 			if (!user) {
-				return res.status(404).send({ message: "User Not found." });
+				return res.status(404).send({
+					message:
+						"Email address is not registered. Check the email address again.",
+				});
 			}
 
 			let passwordIsValid = bcrypt.compareSync(
@@ -45,7 +48,9 @@ exports.login = (req, res) => {
 		})
 		.catch((err) => {
 			console.error(err.message);
-			res.status(500).send({ message: "Failed to login." });
+			res.status(500).send({
+				message: "Failed to login. Please check application log.",
+			});
 		});
 };
 
@@ -53,7 +58,7 @@ exports.refreshToken = async (req, res) => {
 	const { refreshToken: requestToken } = req.body;
 
 	if (requestToken == null) {
-		return res.status(403).json({ message: "Refresh Token is required!" });
+		return res.status(400).json({ message: "Refresh Token is required!" });
 	}
 
 	try {
@@ -62,7 +67,7 @@ exports.refreshToken = async (req, res) => {
 		});
 
 		if (!refreshToken) {
-			res.status(403).json({
+			res.status(400).json({
 				message: "Refresh token is not in database!",
 			});
 			return;
@@ -88,7 +93,11 @@ exports.refreshToken = async (req, res) => {
 			refreshToken: refreshToken.token,
 		});
 	} catch (err) {
-		return res.status(500).send({ message: err });
+		console.error(err.message);
+		return res.status(500).send({
+			message:
+				"Failed to generate access token. Please check application log.",
+		});
 	}
 };
 
@@ -118,7 +127,10 @@ exports.create = (req, res) => {
 			}
 		})
 		.catch((err) => {
-			res.status(500).send({ message: err.message });
+			console.error(err.message);
+			res.status(500).send({
+				message: "Failed to create user. Please check application log.",
+			});
 		});
 };
 
@@ -137,7 +149,10 @@ exports.delete = (req, res) => {
 				});
 		})
 		.catch((err) => {
-			res.status(500).send({ message: err.message });
+			console.error(err.message);
+			res.status(500).send({
+				message: "Failed to delete user. Please check application log.",
+			});
 		});
 };
 
