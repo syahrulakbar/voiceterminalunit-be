@@ -1,7 +1,7 @@
 const process = require("process");
 
 exports.getDeviceStatus = (req, res) => {
-	var status = {};
+	let status = {};
 	const si = require("systeminformation");
 
 	si.mem()
@@ -15,7 +15,7 @@ exports.getDeviceStatus = (req, res) => {
 					si.cpuTemperature()
 						.then((info) => {
 							status.temperature = info.main;
-							res.status(200).send({ deviceStatus: status });
+							res.status(200).send({ ...status });
 						})
 						.catch((err) => {
 							res.status(500).send({ message: err.message });
