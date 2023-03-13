@@ -2,7 +2,7 @@ const { format, createLogger, transports } = require("winston");
 const { combine, timestamp, printf } = format;
 
 const myFormat = printf(({ level, message, timestamp }) => {
-	return `${timestamp} ${level}: ${message}`;
+	return `${new Date().toLocaleString()} ${level}: ${message}`;
 });
 
 const combinedFormat = combine(timestamp(), myFormat);
