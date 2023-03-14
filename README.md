@@ -24,7 +24,7 @@ SECRET_KEY = voice-terminal-unit
 Clone this repository then run
 
 ```
-npm init
+sudo npm install
 ```
 
 After all packages installed, place the .env files on this app folder. The directory should be like this
@@ -58,6 +58,6 @@ This application documentation can be accesed through:
 
 ## Built With
 
-* [Express](https://expressjs.com/) - Node JS Framework used to create API
-* [Sequelize](https://sequelize.org/) - ORM
-* [Swagger](https://swagger.io/) - Used to create application documentation
+-   [Express](https://expressjs.com/) - Node JS Framework used to create API
+-   [Sequelize](https://sequelize.org/) - ORM
+-   [Swagger](https://swagger.io/) - Used to create application documentation
