@@ -1,0 +1,9 @@
+{
+	"development": {
+		"host": "localhost",
+		"username": "postgres",
+		"password": "123",
+		"database": "voiceterminalunit-dev",
+		"dialect": "postgres"
+	}
+}
