@@ -7,6 +7,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./utils/swagger.js").swaggerSpec;
 const winston = require("winston");
 const { logger, combinedFormat } = require("./utils/logger.js");
+const websocket = require("./utils/websocket.js");
 
 const app = express();
 
@@ -46,4 +47,6 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
 	logger.info(`Server is running on port ${PORT}.`);
 });
+
+websocket.start(app);
 

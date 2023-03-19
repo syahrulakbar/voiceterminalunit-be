@@ -34,3 +34,34 @@ exports.getDeviceStatus = (req, res) => {
 		});
 };
 
+exports.socketGetDeviceStatus = () => {
+	return new Promise((resolve, reject) => {
+		let status = {};
+
+		si.mem()
+			.then((info) => {
+				status.memory = parseFloat(
+					((info.active / info.total) * 100).toFixed(2)
+				);
+				si.currentLoad()
+					.then((info) => {
+						status.cpu = parseFloat(info.currentLoad.toFixed(2));
+						si.cpuTemperature()
+							.then((info) => {
+								status.temperature = info.main;
+								resolve(status);
+							})
+							.catch((err) => {
+								logger.error(err.message);
+							});
+					})
+					.catch((err) => {
+						logger.error(err.message);
+					});
+			})
+			.catch((err) => {
+				logger.error(err.message);
+			});
+	});
+};
+
