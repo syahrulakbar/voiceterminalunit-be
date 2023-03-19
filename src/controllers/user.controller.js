@@ -156,3 +156,22 @@ exports.delete = (req, res) => {
 		});
 };
 
+exports.getAll = (req, res) => {
+	User.findAll()
+		.then((users) => {
+			if (!users)
+				return res.status(404).send({ message: "User not found." });
+			else
+				res.status(200).send({
+					message: "Users was fetched successfully.",
+					data: users,
+				});
+		})
+		.catch((err) => {
+			logger.error(err.message);
+			res.status(500).send({
+				message: "Failed to fetch users. Please check application log.",
+			});
+		});
+};
+

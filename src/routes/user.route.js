@@ -322,5 +322,70 @@ module.exports = function (app) {
 	 *                    example: Failed to delete user. Please check application log.
 	 */
 	app.delete("/api/users/:id", controller.delete);
+
+	/**
+	 * @swagger
+	 * /api/users:
+	 *   get:
+	 *     tags:
+	 *       - User Management
+	 *     summary: Get all user accounts.
+	 *     description: Get all user accounts.
+	 *     responses:
+	 *       200:
+	 *          description: Users successfully fetched.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Result message.
+	 *                    example: Users was fetched successfully.
+	 *                  data:
+	 *                    type: array
+	 *                    items:
+	 *                      type: object
+	 *                      properties:
+	 *                        id:
+	 *                          type: string
+	 *                          example: e9c03ec2-3cf3-4bec-9d72-85fad5e4a06b
+	 *                        email:
+	 *                          type: string
+	 *                          example: superadmin@mail.com
+	 *                        password:
+	 *                          type: string
+	 *                          example: $2a$08$BWDAcdpTIZ/Yuy33vXZld.QWx4kv8t.JHBSvEI3fWLngVHIM5n/Ma
+	 *                        createdAt:
+	 *                          type: string
+	 *                          example: 2023-03-19T14:07:50.893Z
+	 *                        updatedAt:
+	 *                          type: string
+	 *                          example: 2023-03-19T14:07:50.893Z
+	 *       404:
+	 *         description: User not found.
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                message:
+	 *                  type: string
+	 *                  description: Result message.
+	 *                  example: User not found.
+	 *       500:
+	 *         description: Application error.
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                message:
+	 *                  type: string
+	 *                  description: Application error.
+	 *                  example: Failed to fetch users. Please check application log.
+	 */
+	app.get("/api/users", controller.getAll);
 };
 
