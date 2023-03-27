@@ -16,7 +16,7 @@ exports.start = (app) => {
 		}, 1000);
 	});
 
-	let PORT = 3000;
+	let PORT = process.env.WEBSOCKET_PORT || 3000;
 	server.listen(PORT, () => {
 		logger.info(`Socket is running on port ${PORT}.`);
 	});

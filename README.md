@@ -16,6 +16,9 @@ DB_USER = postgres
 DB_PASSWORD = 123
 DB_DATABASE = voiceterminalunit-dev
 
+SERVER_PORT = 8080
+WEBSOCKET_PORT = 3000
+
 SECRET_KEY = voice-terminal-unit
 ```
 
