@@ -387,5 +387,71 @@ module.exports = function (app) {
 	 *                  example: Failed to fetch users. Please check application log.
 	 */
 	app.get("/api/users", controller.getAll);
+
+	/**
+	 * @swagger
+	 * /api/users/{id}:
+	 *   put:
+	 *     tags:
+	 *       - User Management
+	 *     summary: Update user
+	 *     description: Update user using user id.
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             type: object
+	 *             properties:
+	 *                email:
+	 *                  type: string
+	 *                  description: The user's email.
+	 *                  example: admin12@mail.com
+	 *                password:
+	 *                  type: string
+	 *                  description: The user's password.
+	 *                  example: 111222333
+	 *     parameters:
+	 *     - name: id
+	 *       in: path
+	 *       description: User's id
+	 *       required: true
+	 *       type: string
+	 *     responses:
+	 *       200:
+	 *          description: User was updated successfully.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Result message.
+	 *                    example: User was updated successfully.
+	 *       404:
+	 *          description: User not found, incorrect id.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Result message.
+	 *                    example: User not found.
+	 *       500:
+	 *          description: Application Error.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Application Error.
+	 *                    example: Failed to update user. Please check application log.
+	 */
+	app.put("/api/users/:id", controller.update);
 };
 

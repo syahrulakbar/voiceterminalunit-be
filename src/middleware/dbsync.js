@@ -19,6 +19,18 @@ const init = () => {
 		}).then((user) => {
 			user.setRoles(1);
 		});
+		User.create({
+			email: "admin12@mail.com",
+			password: bcrypt.hashSync("123456", 8),
+		}).then((user) => {
+			user.setRoles(2);
+		});
+		User.create({
+			email: "admin23@mail.com",
+			password: bcrypt.hashSync("123456", 8),
+		}).then((user) => {
+			user.setRoles(2);
+		});
 
 		Role.create({
 			id: 1,

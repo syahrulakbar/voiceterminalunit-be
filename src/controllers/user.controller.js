@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const config = require("../config/auth.config.js");
 const { logger } = require("../utils/logger.js");
+const { default: Users } = require("node-os-utils/lib/users");
 
 exports.login = (req, res) => {
 	User.findOne({
@@ -172,6 +173,36 @@ exports.getAll = (req, res) => {
 			res.status(500).send({
 				message: "Failed to fetch users. Please check application log.",
 			});
+		});
+};
+
+exports.update = (req, res) => {
+	if (req.body.password) {
+		req.body.password = bcrypt.hashSync(req.body.password, 8);
+	}
+	User.update(
+		{
+			...req.body,
+		},
+		{ where: { id: req.params.id } }
+	)
+		.then((user) => {
+			res.status(200).send({
+				message: "User was updated successfully.",
+			});
+		})
+		.catch((err) => {
+			logger.error(err.message);
+			if (err.message.includes("invalid input syntax")) {
+				res.status(404).send({
+					message: "User not found.",
+				});
+			} else {
+				res.status(500).send({
+					message:
+						"Failed to update user. Please check application log.",
+				});
+			}
 		});
 };
 
