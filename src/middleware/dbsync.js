@@ -1,6 +1,7 @@
 const db = require("../models");
 const Role = db.role;
 const User = db.user;
+const IPConfiguration = db.ipconfiguration;
 const { logger } = require("../utils/logger.js");
 
 const init = () => {
@@ -40,6 +41,11 @@ const init = () => {
 		Role.create({
 			id: 2,
 			name: "admin",
+		});
+
+		IPConfiguration.create({
+			deviceName: "VTU-1",
+			connectionType: "dhcp",
 		});
 	};
 };

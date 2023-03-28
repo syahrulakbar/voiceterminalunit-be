@@ -1,5 +1,7 @@
 const IP = require("ip");
 const { logger } = require("../utils/logger.js");
+const db = require("../models");
+const IPConfiguration = db.ipconfiguration;
 
 exports.getIPAddress = (req, res) => {
 	const ipAddress = IP.address();
@@ -45,3 +47,73 @@ exports.reboot = (req, res) => {
 	});
 };
 
+exports.setConfig = (req, res) => {
+	IPConfiguration.findAll().then((ipconfig) => {
+		if (ipconfig.length === 0) {
+			// Create
+			IPConfiguration.create({
+				...req.body,
+			})
+				.then((ipconfig) => {
+					res.status(200).send({
+						message: "IP Configuration was set successfully.",
+					});
+				})
+				.catch((err) => {
+					logger.error(err.message);
+					res.status(500).send({
+						message:
+							"Failed to set IP Configuration. Please check application log.",
+					});
+				});
+		} else {
+			// Update
+			if (req.body.connectionType === "dhcp") {
+				req.body.address = null;
+				req.body.netmask = null;
+				req.body.gateway = null;
+				req.body.dnsServer = null;
+			}
+			IPConfiguration.update(
+				{
+					...req.body,
+				},
+				{ where: { id: ipconfig[0].id } }
+			)
+				.then((ipconfig) => {
+					res.status(200).send({
+						message: "IP Configuration was set successfully.",
+					});
+				})
+				.catch((err) => {
+					logger.error(err.message);
+					res.status(500).send({
+						message:
+							"Failed to set IP Configuration. Please check application log.",
+					});
+				});
+		}
+	});
+};
+
+exports.getConfig = (req, res) => {
+	IPConfiguration.findOne()
+		.then((ipconfig) => {
+			if (!ipconfig)
+				return res
+					.status(404)
+					.send({ message: "IP Configuration not found." });
+			else
+				res.status(200).send({
+					message: "IP Configuration was fetched successfully.",
+					data: ipconfig,
+				});
+		})
+		.catch((err) => {
+			logger.error(err.message);
+			res.status(500).send({
+				message:
+					"Failed to fetch IP Configuration. Please check application log.",
+			});
+		});
+};

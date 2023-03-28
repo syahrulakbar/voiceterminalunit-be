@@ -69,5 +69,128 @@ module.exports = function (app) {
 	 *     description: Reboot device
 	 */
 	app.post("/api/maintenance/reboot", controller.reboot);
-};
 
+	/**
+	 * @swagger
+	 * /api/maintenance/ipconfig:
+	 *   post:
+	 *     tags:
+	 *      - Maintenance
+	 *     summary: Set IP Configuration
+	 *     description: Set IP Configuration
+	 *     requestBody:
+	 *      description: IP Configuration
+	 *      content:
+	 *        application/json:
+	 *          schema:
+	 *            type: object
+	 *            properties:
+	 *              connectionType:
+	 *                type: string
+	 *                description: Connection type (static or dhcp)
+	 *                example: static
+	 *              address:
+	 *                type: string
+	 *                description: IP address
+	 *                example: 192.168.56.1
+	 *              netmask:
+	 *                type: string
+	 *                description: Netmask
+	 *                example: 255.255.255.0
+	 *              gateway:
+	 *                type: string
+	 *                description: Gateway
+	 *                example: 192.168.6.1
+	 *              dnsServer:
+	 *                type: string
+	 *                description: DNS Server
+	 *                example: 1.1.1.1
+	 *     responses:
+	 *       200:
+	 *          description: Successfully set IP configuration.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Message result.
+	 *                    example: IP Configuration was set successfully.
+	 *       500:
+	 *          description: Error setting IP configuration.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Message result.
+	 *                    example: Failed to set IP Configuration. Please check application log.
+	 *
+	 */
+	app.post("/api/maintenance/ipconfig", controller.setConfig);
+
+	/**
+	 * @swagger
+	 * /api/maintenance/ipconfig:
+	 *   get:
+	 *     tags:
+	 *       - Maintenance
+	 *     summary: Check device's IP Address configuration
+	 *     description: Check device's IP Address configuration.
+	 *     responses:
+	 *       200:
+	 *          description: IP Configuration was fetched successfully.
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  message:
+	 *                    type: string
+	 *                    description: Message result.
+	 *                    example: IP Configuration was fetched successfully.
+	 *                  data:
+	 *                    type: object
+	 *                    properties:
+	 *                     id:
+	 *                       type: number
+	 *                       description: ID
+	 *                       example: 1
+	 *                     deviceName:
+	 *                       type: string
+	 *                       description: Device name
+	 *                       example: VTU-1
+	 *                     connectionType:
+	 *                       type: string
+	 *                       description: Connection type (static or dhcp)
+	 *                       example: static
+	 *                     address:
+	 *                       type: string
+	 *                       description: IP address
+	 *                       example: 192.168.56.1
+	 *                     netmask:
+	 *                       type: string
+	 *                       description: Netmask
+	 *                       example: 255.255.255.0
+	 *                     gateway:
+	 *                       type: string
+	 *                       description: Gateway
+	 *                       example: 192.168.6.1
+	 *                     dnsServer:
+	 *                       type: string
+	 *                       description: DNS Server
+	 *                       example: 1.1.1.1
+	 *                     createdAt:
+	 *                       type: string
+	 *                       description: Created at
+	 *                       example: 2023-03-28T08:09:33.453Z
+	 *                     updatedAt:
+	 *                       type: string
+	 *                       description: Updated at
+	 *                       example: 2023-03-28T08:09:33.453Z
+	 */
+	app.get("/api/maintenance/ipconfig", controller.getConfig);
+};

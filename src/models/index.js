@@ -24,6 +24,10 @@ db.refreshToken = require("../models/refreshToken.model.js")(
 	sequelize,
 	Sequelize
 );
+db.ipconfiguration = require("../models/ipconfiguration.model.js")(
+	sequelize,
+	Sequelize
+);
 
 db.role.belongsToMany(db.user, {
 	through: "user_roles",
