@@ -2,12 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const dbSync = require("./middleware/dbsync.js");
-const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./utils/swagger.js").swaggerSpec;
 const winston = require("winston");
 const { logger, combinedFormat } = require("./utils/logger.js");
 const websocket = require("./utils/websocket.js");
+const db = require("./models");
 
 const app = express();
 
@@ -23,17 +23,19 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
-// syncronize db
+// synchronize db
 if (process.env.NODE_ENV == "production") {
 	db.sequelize.sync();
 } else {
 	dbSync();
-	logger.add(
-		new winston.transports.Console({
-			format: combinedFormat,
-		})
-	);
 }
+
+// logger
+logger.add(
+	new winston.transports.Console({
+		format: combinedFormat,
+	})
+);
 
 // swagger
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
