@@ -176,6 +176,36 @@ exports.getAll = (req, res) => {
 		});
 };
 
+exports.getOne = (req, res) => {
+	User.findOne({
+		where: {
+			id: req.params.id,
+		},
+	})
+		.then((user) => {
+			if (!user)
+				return res.status(404).send({ message: "User not found." });
+			else
+				res.status(200).send({
+					message: "User was fetched successfully.",
+					data: user,
+				});
+		})
+		.catch((err) => {
+			logger.error(err.message);
+			if (err.message.includes("invalid input syntax")) {
+				res.status(404).send({
+					message: "User not found. Invalid ID.",
+				});
+			} else {
+				res.status(500).send({
+					message:
+						"Failed to fetch user. Please check application log.",
+				});
+			}
+		});
+};
+
 exports.update = (req, res) => {
 	if (req.body.password) {
 		req.body.password = bcrypt.hashSync(req.body.password, 8);
