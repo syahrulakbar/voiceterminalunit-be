@@ -24,7 +24,7 @@ db.refreshToken = require("../models/refreshToken.model.js")(
 	sequelize,
 	Sequelize
 );
-db.ipconfiguration = require("../models/ipconfiguration.model.js")(
+db.ipconfiguration = require("../models/ipConfiguration.model.js")(
 	sequelize,
 	Sequelize
 );
