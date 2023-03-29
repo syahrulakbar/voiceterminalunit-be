@@ -7,7 +7,7 @@ exports.getDeviceStatus = (req, res) => {
 	si.mem()
 		.then((info) => {
 			status.memory = parseFloat(
-				((info.active / info.total) * 100).toFixed(2)
+				(info.active / 1000**2).toFixed(2)
 			);
 			si.currentLoad()
 				.then((info) => {
@@ -41,7 +41,7 @@ exports.socketGetDeviceStatus = () => {
 		si.mem()
 			.then((info) => {
 				status.memory = parseFloat(
-					((info.active / info.total) * 100).toFixed(2)
+					(info.active / 1000**2).toFixed(2)
 				);
 				si.currentLoad()
 					.then((info) => {
