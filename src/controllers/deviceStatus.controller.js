@@ -69,6 +69,8 @@ const getCPUTemp = () => {
       temp.stdout.on("data", function (data) {
         resolve(data / 1000);
       });
+    } else {
+      resolve(60);
     }
   });
 };
