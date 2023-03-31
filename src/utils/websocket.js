@@ -27,7 +27,7 @@ exports.start = (app) => {
 
     let timeout = 1000;
 
-    let monitorFunction = () => {
+    let monitoringFunction = () => {
       deviceStatusController.socketGetDeviceStatus().then((status) => {
         if (status) {
           socket.emit("deviceStatus", status);
@@ -44,7 +44,7 @@ exports.start = (app) => {
       });
     };
 
-    let monitor = setInterval(monitorFunction, 1000);
+    let monitoring = setInterval(monitoringFunction, 1000);
     let logging = setInterval(loggingFunction, timeout);
 
     socket.on("deviceStatus", (data) => {
@@ -59,7 +59,9 @@ exports.start = (app) => {
       if (!isNaN(parseInt(data))) {
         timeout = Number(data) * 1000;
         clearInterval(logging);
+        clearInterval(monitoring);
         logging = setInterval(loggingFunction, timeout);
+        monitoring = setInterval(monitoringFunction, timeout);
       }
     });
   });
