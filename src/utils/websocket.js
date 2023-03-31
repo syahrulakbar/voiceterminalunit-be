@@ -1,6 +1,7 @@
 const http = require("http");
 const { logger, monitoringLogger } = require("../utils/logger.js");
 const deviceStatusController = require("../controllers/deviceStatus.controller");
+const log = require("../controllers/log.controller.js");
 
 exports.start = (app) => {
   const server = http.createServer(app);
@@ -24,6 +25,7 @@ exports.start = (app) => {
       deviceStatusController.socketGetDeviceStatus().then((status) => {
         if (status) {
           monitoringLogger.info(JSON.stringify(status));
+          log.save(status);
         }
       });
     };

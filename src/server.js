@@ -12,7 +12,7 @@ const db = require("./models");
 const app = express();
 
 let corsOptions = {
-	origin: "http://localhost:8081",
+  origin: "http://localhost:8081",
 };
 
 app.use(cors(corsOptions));
@@ -25,16 +25,16 @@ app.use(express.urlencoded({ extended: true }));
 
 // synchronize db
 if (process.env.NODE_ENV == "production") {
-	db.sequelize.sync();
+  db.sequelize.sync();
 } else {
-	dbSync();
+  dbSync();
 }
 
 // logger
 logger.add(
-	new winston.transports.Console({
-		format: combinedFormat,
-	})
+  new winston.transports.Console({
+    format: combinedFormat,
+  })
 );
 
 // swagger
@@ -44,11 +44,11 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 require("./routes/user.route.js")(app);
 require("./routes/deviceStatus.route.js")(app);
 require("./routes/maintenance.route.js")(app);
+require("./routes/log.route.js")(app);
 
 const PORT = process.env.SERVER_PORT || 8080;
 app.listen(PORT, () => {
-	logger.info(`Server is running on port ${PORT}.`);
+  logger.info(`Server is running on port ${PORT}.`);
 });
 
 websocket.start(app);
-
