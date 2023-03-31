@@ -62,11 +62,13 @@ exports.socketGetDeviceStatus = () => {
 
 const getCPUTemp = () => {
   return new Promise((resolve, reject) => {
-    let spawn = require("child_process").spawn;
-    let temp = spawn("cat", ["/sys/class/thermal/thermal_zone0/temp"]);
+    if (process.platform === "linux") {
+      let spawn = require("child_process").spawn;
+      let temp = spawn("cat", ["/sys/class/thermal/thermal_zone0/temp"]);
 
-    temp.stdout.on("data", function (data) {
-      resolve(data / 1000);
-    });
+      temp.stdout.on("data", function (data) {
+        resolve(data / 1000);
+      });
+    }
   });
 };
