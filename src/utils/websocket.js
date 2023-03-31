@@ -7,9 +7,23 @@ exports.start = (app) => {
   const server = http.createServer(app);
   const { Server } = require("socket.io");
   const io = new Server(server);
+  let allClients = [];
 
   io.on("connection", (socket) => {
     logger.info("a user connected");
+    allClients.push(socket);
+
+    socket.on("disconnect", function () {
+      logger.info("a user disconnected");
+      let i = allClients.indexOf(socket);
+      allClients.splice(i, 1);
+      try {
+        io.in(socket.id).disconnectSockets();
+        clearInterval(logging);
+      } catch (error) {
+        logger.error(error);
+      }
+    });
 
     let timeout = 1000;
 
@@ -54,16 +68,4 @@ exports.start = (app) => {
   server.listen(PORT, () => {
     logger.info(`Socket is running on port ${PORT}.`);
   });
-};
-
-const startLog = (interval) => {
-  setInterval(() => {
-    deviceStatusController.socketGetDeviceStatus().then((status) => {
-      if (status) {
-        console.log(interval);
-        socket.emit("deviceStatus", status);
-        monitoringLogger.info(JSON.stringify(status));
-      }
-    });
-  }, interval);
 };

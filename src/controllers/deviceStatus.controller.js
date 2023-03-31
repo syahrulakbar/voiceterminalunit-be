@@ -4,36 +4,30 @@ const { logger } = require("../utils/logger.js");
 
 exports.getDeviceStatus = (req, res) => {
   let status = {};
-  let allClients = [];
-  let runtime = 1;
-  io.on("connection", (client) => {
-    allClients.push(client);
-    client.on("disconnect", function () {
-      console.log("Got disconnect!");
-      let i = allClients.indexOf(client);
-      allClients.splice(i, 1);
+  osu
+    .mem()
+    .then((memoryMb) => {
+      status.memory = memoryMb;
+      osu.cpu
+        .usage()
+        .then((cpuPercentage) => {
+          status.cpu = cpuPercentage;
+          try {
+            getCPUTemp().then((cpuTemp) => {
+              status.temp = cpuTemp;
+              res.status(200).send({ ...status });
+            });
+          } catch (err) {
+            logger.error(err);
+          }
+        })
+        .catch((err) => {
+          logger.error(err.message);
+        });
+    })
+    .catch((err) => {
+      logger.error(err.message);
     });
-    client.on("message", (message) => {
-      runtime = message;
-    });
-    osu
-      .mem()
-      .then((memoryMb) => {
-        status.memory = memoryMb;
-        osu.cpu
-          .usage()
-          .then((cpuPercentage) => {
-            status.cpu = cpuPercentage;
-            res.status(200).send({ ...status });
-          })
-          .catch((err) => {
-            logger.error(err.message);
-          });
-      })
-      .catch((err) => {
-        logger.error(err.message);
-      });
-  });
 };
 
 exports.socketGetDeviceStatus = () => {
@@ -47,7 +41,14 @@ exports.socketGetDeviceStatus = () => {
           .usage()
           .then((cpuPercentage) => {
             status.cpu = cpuPercentage;
-            resolve(status);
+            try {
+              getCPUTemp().then((cpuTemp) => {
+                status.temp = cpuTemp;
+                resolve(status);
+              });
+            } catch (err) {
+              logger.error(err);
+            }
           })
           .catch((err) => {
             logger.error(err.message);
@@ -56,5 +57,16 @@ exports.socketGetDeviceStatus = () => {
       .catch((err) => {
         logger.error(err.message);
       });
+  });
+};
+
+const getCPUTemp = () => {
+  return new Promise((resolve, reject) => {
+    let spawn = require("child_process").spawn;
+    let temp = spawn("cat", ["/sys/class/thermal/thermal_zone0/temp"]);
+
+    temp.stdout.on("data", function (data) {
+      resolve(data / 1000);
+    });
   });
 };
